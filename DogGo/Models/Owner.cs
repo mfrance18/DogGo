@@ -18,5 +18,8 @@ namespace DogGo.Models
         public Neighborhood Neighborhood { get; set; }
 
         public string Phone { get; set; }
+
+        public List<Dog> Dogs;
+
     }
 }
