@@ -10,40 +10,75 @@
     <h4>Walker</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Walker.Id)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Walker.Id)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Walker.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Walker.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Walker.Neighborhood)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Walker.Neighborhood.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Image
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             <img class="bg-info" src="@Model.Walker.ImageUrl" alt="avatar" />
         </dd>
     </dl>
 </div>
-<div>
+<section class="recentWalks">
+
     <h4>Recent Walks</h4>
-    @foreach(Walk walk in Model.Walks)
+    <div class="row">
+        <dl class="col-sm-10">
+            <dt>Date</dt>
+            @foreach (Walk walk in Model.Walks)
             {
-                <p>@walk.Duration</p>
+
+                <dd>@walk.Date</dd>
             }
-</div>
+        </dl>
+
+        <dl class="col-sm-10">
+            <dt>Client</dt>
+            @foreach (Walk walk in Model.Walks)
+            {
+
+                <dd>@walk.Owner.Name</dd>
+            }
+        </dl>
+        <dl class="col-sm-10">
+            <dt>Duration</dt>
+            @foreach (Walk walk in Model.Walks)
+            {
+
+                <dd>@walk.Duration</dd>
+            }
+        </dl>
+    </div>
+</section>
+
+<section>
+    <dl class="col-sm-10">
+        <dt>Total Time</dt>
+            @foreach (Walk walk in Model.Walks)
+            {
+            <dd>@Html.DisplayFor(walk => walk.TotalTime)</dd>
+            }
+           
+        </dl>
+</section>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Walker.Id}) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Walker.Id }) |
     <a asp-action="Index">Back to List</a>
 </div>
