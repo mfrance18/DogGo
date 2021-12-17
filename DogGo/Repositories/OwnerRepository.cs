@@ -132,7 +132,8 @@ namespace DogGo.Repositories
                     cmd.CommandText = @"
                          SELECT Owner.Id as ownerId, Owner.Name as ownerName,  n.Name as neighborhoodName, Address, Email, Phone
                         FROM Owner
-                        join Neighborhood n on n.Id = Owner.NeighborhoodId";
+                        join Neighborhood n on n.Id = Owner.NeighborhoodId
+                        WHERE Email = @email";
 
                     cmd.Parameters.AddWithValue("@email", email);
 

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DogGo.Models;
 using DogGo.Repositories;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogGo.Controllers
 {
@@ -20,14 +22,18 @@ namespace DogGo.Controllers
             _dogRepo = dogRepository;
         }
         // GET: DogsController
+        [Authorize]
         public ActionResult Index()
         {
-            List<Dog> dogs = _dogRepo.GetAllDogs();
+            int ownerId = GetCurrentUserId();
+
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(ownerId);
 
             return View(dogs);
         }
 
         // GET: DogsController/Details/5
+
         public ActionResult Details(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
@@ -40,6 +46,7 @@ namespace DogGo.Controllers
         }
 
         // GET: DogsController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -52,11 +59,14 @@ namespace DogGo.Controllers
         {
             try
             {
+                // update the dogs OwnerId to the current user's Id
+                dog.OwnerId = GetCurrentUserId();
+
                 _dogRepo.AddDog(dog);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View(dog);
             }
@@ -65,6 +75,7 @@ namespace DogGo.Controllers
         // GET: DogsController/Edit/5
         public ActionResult Edit(int id)
         {
+
             Dog dog = _dogRepo.GetDogById(id);
 
             if(dog == null)
@@ -118,6 +129,12 @@ namespace DogGo.Controllers
             {
                 return View(dog);
             }
+        }
+
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
